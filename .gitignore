@@ -7,7 +7,10 @@
 .buildlog/
 .history
 
-
+# IDE specific
+.idea/
+.vscode/
+*.iml
 
 # Flutter repo-specific
 /bin/cache/
