@@ -2,10 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:iconify_flutter/iconify_flutter.dart';
 import 'package:iconify_flutter/icons/ion.dart';
 import 'package:nimbus/theme/colors.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
 
+void signUserout(){
+    FirebaseAuth.instance.signOut();
+  }
   @override
   State<SettingsScreen> createState() => _SettingsScreenState();
 }
@@ -30,6 +34,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
             context,
           ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w600),
         ),
+                        
+              actions: [IconButton(onPressed: widget.signUserout,icon:Icon(Icons.logout ))],backgroundColor: const Color.fromARGB(255, 3, 3, 3),         
       ),
       body: ListView(
         padding: const EdgeInsets.fromLTRB(14, 10, 14, 24),
@@ -61,6 +67,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
                           color: AppColors.textSecondary,
                         ),
+                        
                       ),
                     ],
                   ),

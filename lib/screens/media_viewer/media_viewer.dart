@@ -14,7 +14,6 @@ import 'package:nimbus/services/trash_repository.dart';
 import 'package:nimbus/services/prefs_album.dart';
 import 'package:nimbus/widgets/toast.dart';
 import 'package:photo_manager/photo_manager.dart';
-import 'package:share_plus/share_plus.dart';
 
 class MediaViewerScreen extends StatefulWidget {
   const MediaViewerScreen._({
@@ -330,18 +329,13 @@ class _MediaViewerScreenState extends State<MediaViewerScreen> {
     if (_items.isEmpty) {
       return;
     }
-    final MediaViewerItem item = _currentItem;
-    final File? file = await _resolveFileCached(item);
-    if (file == null || !await file.exists()) {
-      if (!mounted) {
-        return;
-      }
-      AppToast.show(context, 'Could not share this file.');
+    if (!mounted) {
       return;
     }
 
-    await SharePlus.instance.share(
-      ShareParams(files: <XFile>[XFile(file.path)]),
+    AppToast.show(
+      context,
+      'Share is temporarily unavailable in this build.',
     );
   }
 

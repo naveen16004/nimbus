@@ -32,7 +32,6 @@ import 'package:nimbus/widgets/toast.dart';
 import 'package:nimbus/widgets/action_button.dart';
 import 'package:path/path.dart' as p;
 import 'package:photo_manager/photo_manager.dart';
-import 'package:share_plus/share_plus.dart';
 
 class AlbumViewScreen extends StatefulWidget {
   AlbumViewScreen._({
@@ -701,60 +700,14 @@ class _AlbumViewScreenState extends State<AlbumViewScreen>
       return;
     }
 
-    setState(() {
-      _isApplyingSelectionAction = true;
-    });
-
-    try {
-      final List<XFile> files = <XFile>[];
-      for (final AlbumViewMediaItem item in _items) {
-        if (!_selectedItemIds.contains(item.id)) {
-          continue;
-        }
-        if (item.source == AlbumViewMediaSource.localFile) {
-          final String? path = item.localFilePath;
-          if (path == null) {
-            continue;
-          }
-          final File localFile = File(path);
-          if (!await localFile.exists()) {
-            continue;
-          }
-          files.add(XFile(localFile.path));
-          continue;
-        }
-
-        final ThumbnailRef thumbnail =
-            item.assetItem?.thumbnail ??
-            const PlaceholderThumbnailRef(color: AppColors.surfaceVariant);
-        if (thumbnail is! AssetEntityThumbnailRef) {
-          continue;
-        }
-        final File? file = await thumbnail.asset.file;
-        if (file == null || !await file.exists()) {
-          continue;
-        }
-        files.add(XFile(file.path));
-      }
-
-      if (!mounted) {
-        return;
-      }
-
-      if (files.isEmpty) {
-        AppToast.show(context, 'Could not resolve files to share.');
-        return;
-      }
-
-      await SharePlus.instance.share(ShareParams(files: files));
-      _clearSelection();
-    } finally {
-      if (mounted) {
-        setState(() {
-          _isApplyingSelectionAction = false;
-        });
-      }
+    if (!mounted) {
+      return;
     }
+
+    AppToast.show(
+      context,
+      'Share is temporarily unavailable in this build.',
+    );
   }
 
   Future<void> _cloudSyncSelected() async {
