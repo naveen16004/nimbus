@@ -32,7 +32,6 @@ import 'package:nimbus/widgets/top_bar.dart';
 import 'package:nimbus/widgets/toast.dart';
 import 'package:nimbus/widgets/action_button.dart';
 import 'package:photo_manager/photo_manager.dart';
-import 'package:share_plus/share_plus.dart';
 
 class HomeScreen extends StatefulWidget {
   HomeScreen({
@@ -481,44 +480,20 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
       return;
     }
 
-    final List<AssetEntity> selectedAssets = _selectedAssetEntities();
-    if (selectedAssets.isEmpty) {
+    final Set<String> selectedIds = _selectedMediaIds();
+    if (selectedIds.isEmpty) {
       _selectionController.clear();
       return;
     }
 
-    setState(() {
-      _isApplyingSelectionAction = true;
-    });
-
-    try {
-      final List<XFile> files = <XFile>[];
-      for (final AssetEntity asset in selectedAssets) {
-        final File? file = await asset.file;
-        if (file == null || !await file.exists()) {
-          continue;
-        }
-        files.add(XFile(file.path));
-      }
-
-      if (!mounted) {
-        return;
-      }
-
-      if (files.isEmpty) {
-        AppToast.show(context, 'Could not resolve files to share.');
-        return;
-      }
-
-      await SharePlus.instance.share(ShareParams(files: files));
-      _selectionController.clear();
-    } finally {
-      if (mounted) {
-        setState(() {
-          _isApplyingSelectionAction = false;
-        });
-      }
+    if (!mounted) {
+      return;
     }
+
+    AppToast.show(
+      context,
+      'Share is temporarily unavailable in this build.',
+    );
   }
 
   Future<void> _cloudSyncSelected() async {
